@@ -15,8 +15,9 @@ class CalendarGenerator:
         else: return 0
 
     def get_start_day_of_month(self, month=1, year=1):
-        total_days =366*year
-        total_days=total_days-total_days//4+total_days//100+total_days//400
+        total_days =365*year
+        total_days+=year//4-year//100+year//400
+        
         for m in range(1, month):
             total_days += self.get_days_in_month(m, year)
         return (total_days + 1) % 7
@@ -42,9 +43,60 @@ class CalendarGenerator:
             self.get_days_in_month(month, year)
         )
 
+
+    def generate_calendar_year(self,year=1):
+        calendar=str(year).center(68,' ')+'\n'
+        month=['January','February','March','April','May','June','July','August','September','October','November','December']
+        k=0
+        for i in range(4):
+            calendar+=month[k].center(20,' ')+'\t'+month[k+1].center(20,' ')+'\t'+month[k+2].center(20,' ')+'\n'
+            calendar+='Su Mo Tu We Th Fr Sa\tSu Mo Tu We Th Fr Sa\tSu Mo Tu We Th Fr Sa\n'
+            
+            week_start_day={0:1,1:1,2:1}
+            last_day=[self.get_days_in_month(k+1),self.get_days_in_month(k+2),self.get_days_in_month(k+3)]
+            
+            for month_day in range(1,7,1):
+                if last_day[0]<week_start_day[0] and last_day[1]<week_start_day[1] and last_day[2]<week_start_day[2]:
+                    calendar+='\n'
+                    break
+                else:
+                    for l in range(3):
+                        if last_day[l]<week_start_day[l]:
+                            calendar+=' '*20+'\t'
+                            continue
+
+                        day=week_start_day[l]
+                        
+                        weekDay=0
+                        while weekDay<7:
+                       
+                            if day==1:
+                                week_start=self.get_start_day_of_month(month=k+1+l,year=year)-1
+                                calendar+='   '*week_start
+                                weekDay+=week_start
+
+                            if weekDay==6:
+                                if day<=last_day[l]:
+                                    calendar+=f'{day:2d}'
+                                else:
+                                    calendar+='  '
+                                
+                            elif day<=last_day[l]:
+                                calendar+=f'{day:2d} '
+                            
+                            else:
+                                calendar+='   '
+                            day+=1
+                            weekDay+=1
+
+                        week_start_day[l]=day
+                        calendar+='\t'
+                    calendar+='\n'
+            k+=3
+        return calendar
 if __name__ == "__main__":
     cg = CalendarGenerator()
-    print(cg.generate_calendar(2,2025))
+    print(cg.generate_calendar_year(2026))
 
 
         
