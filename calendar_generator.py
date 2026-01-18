@@ -39,9 +39,16 @@ class CalendarGenerator:
                 else:
                     grid+=' '+str(i)
         return grid
+    
+    def generate_calendar(self, month=1, year=1) -> str:
+        return self.build_grid_string(
+            self.get_start_day_of_month(month, year),
+            self.get_days_in_month(month, year)
+        )
 
-
-
+if __name__ == "__main__":
+    cg = CalendarGenerator()
+    print(cg.generate_calendar(2,2026))
 
 
         
