@@ -27,17 +27,13 @@ class CalendarGenerator:
         for i in range(1,total+1):
             weekday_index = (start_day_index + i - 1) % 7
             if i==1:
-                grid+='   '*start_day_index+str(i)
+                grid+='   '*start_day_index
             if weekday_index==0 and i!=1:
-                if i<10:
-                    grid+='\n '+str(i)
-                else:
-                    grid+='\n'+str(i)
+                grid+='\n'
+            if i<10:
+                grid+=' '+str(i)+' '
             else:
-                if i<10:
-                    grid+='  '+str(i)
-                else:
-                    grid+=' '+str(i)
+                grid+=str(i)+' '
         return grid
     
     def generate_calendar(self, month=1, year=1) -> str:
@@ -48,7 +44,7 @@ class CalendarGenerator:
 
 if __name__ == "__main__":
     cg = CalendarGenerator()
-    print(cg.generate_calendar(2,2026))
+    print(cg.generate_calendar(2,2025))
 
 
         
